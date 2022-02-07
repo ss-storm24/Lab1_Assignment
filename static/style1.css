@@ -1,0 +1,118 @@
+/*SPANS THE BACKGROUND IMAGE WITH THE BROWSER size:  */
+
+/*For all page backgrounds */
+body {
+	color: #111;
+	font-family: exo;
+	 background: url("bookgif.gif") no-repeat center center fixed; 
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+}
+
+/*///////////////////// For the navigation bar //////////////////////////////*/
+
+/* Add background color and structure to the navigation bar */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #e4ded8;
+  position:sticky;
+  top: 0;
+}
+
+/* Make the links push to the left */
+li {
+  float:left;
+}
+
+/* Change the color for each link name */
+li a {
+  display: block;
+  color: #111;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color when hovering over a link */
+li a:hover {
+  background-color: #a29596;
+  color: white;
+}
+
+/* Make the navigation bar active to show which page you're on */
+.active {
+  background-color: white;
+}
+
+/* Center the bar */
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+}
+
+/*/////////////////////// For the Headings and Paragraphs //////////////////////////////*/
+
+/* For the Page Header above the navigation bar */
+.header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 50px;
+}
+
+/* For the large heading's font-size */
+h1 {
+	font-size: 45px;
+}
+
+/* For the medium heading's font-size and alignment */
+h2 {
+	font-size: 30px;
+  text-align: center;
+}
+
+/* For the small heading's font-size and alignment */
+h3 {
+  font-size:25px;
+  text-align: center;
+}
+
+/* For the paragraph's font-size and margin */
+p {
+  margin: 20px;
+  font-size: 22px;
+  background-color: white;
+}
+
+/*////////////////////// For the forms //////////////////////////////////////*/
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}

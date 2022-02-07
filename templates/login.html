@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block heading %}Review Drop{% endblock %}
+
+{% block body %}
+<ul>
+  <li><a href="/">Home</a></li>
+  <li style="float:right"><a href="{{ url_for('register') }}">Register</a></li>
+  <li style="float:right"><a class="active" href="{{ url_for('login') }}">Login</a></li>
+</ul>
+
+<div class="column is-4 is-offset-4">
+  <h3 class="title">Login</h3>
+  <div class="text-center">
+    <div class="box">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="notification is-danger">
+          {{ messages[0] }}
+        </div>
+      {% endif %}
+      {% endwith %}
+      <form action="{{ url_for('login') }}" method="POST">
+        <div class="field">
+          <div class="control">
+            <input type="text" name="username" placeholder="Enter Your Username" autofocus="" class="input is-large">
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <input type="password" name="password" placeholder="Enter Your Password" class="input is-large">
+          </div>
+        </div>
+        
+        <button class="button is-block is-info is-large is-fullwidth">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Sign Up|Register{% endblock %}
+
+{% block heading %}Review Drop{% endblock %}
+
+{% block body %}
+<ul>
+  <li><a href="/">Home</a></li>
+  <li style="float:right"><a class="active" href="{{ url_for('register') }}">Register</a></li>
+  <li style="float:right"><a href="{{ url_for('login') }}">Login</a></li>
+</ul>
+
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Register
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}. Go to the <a href="{{ url_for('login') }}">login page.</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('register') }}" method="POST" >
+            <div class="field">
+                <div class="control">
+                    <input type="text" name="name" placeholder="Enter Your Name" autofocus="" class="input is-large">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input type="text" name="username" placeholder="Enter a Username" autofocus="" class="input is-large">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input type="password" name="password" placeholder="Enter a Password" class="input is-large">
+                </div>
+            </div>
+
+            <button class="button is-block is-info is-large is-fullwidth">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

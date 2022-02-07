@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block heading %}Booksie Review{% endblock %}
+
+{% block body %}
+
+<ul>
+  <li><a class="active" href="/">Home</a></li>
+  <li style="float:right"><a href="{{ url_for('register') }}">Register</a></li>
+  <li style="float:right"><a href="{{ url_for('login') }}">Login</a></li>
+</ul>
+
+<h1 class="text-center">Welcome to Review Drop!</h1>
+<div class="row">
+  <div class="col-sm-6 offset-sm-3">
+    <div class="jumbotron">
+      This is a simple Flask book review website. It shows you how to easily
+      enable users to register, login, and logout of a Flask web app as well as search
+      for books and leave a review.
+    </div>
+
+    <div style="background-color: #e4ded8;"> 
+      <h2 class="text-center">Please Login or Register to continue</h2>
+    </div>
+  </div>
+</div>
+{% endblock %}
