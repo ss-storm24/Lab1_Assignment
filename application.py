@@ -18,7 +18,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Set up database
-# DATABASE_URL = "postgresql://wlkiwvwgqndwtf:411e57176f8293d3bafb47d1ad1899c1c9048b85f641b92b4e6b1e9e506351ae@ec2-54-209-165-105.compute-1.amazonaws.com:5432/d87jp096ui7i1f"
+#DATABASE_URL = "postgresql://wlkiwvwgqndwtf:411e57176f8293d3bafb47d1ad1899c1c9048b85f641b92b4e6b1e9e506351ae@ec2-54-209-165-105.compute-1.amazonaws.com:5432/d87jp096ui7i1f"
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
@@ -96,9 +96,7 @@ def search():
         book_search = request.form.get("search")
         # If the user searches by ISBN
         if request.form.get("inlineRadioOptions") == "option1":
-
-
-return render_template("search.html")
+            return render_template("search.html")
 
 
 if __name__ == "__main__":
