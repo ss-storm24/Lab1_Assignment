@@ -1,12 +1,18 @@
 import os
 
 from flask import Flask, session, render_template, request, url_for, redirect, flash
+from flask import json, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+
+# Set up database
+DATABASE_URL = "postgresql://wlkiwvwgqndwtf:411e57176f8293d3bafb47d1ad1899c1c9048b85f641b92b4e6b1e9e506351ae@ec2-54-209-165-105.compute-1.amazonaws.com:5432/d87jp096ui7i1f"
+engine = create_engine(os.getenv("DATABASE_URL"))
+db = scoped_session(sessionmaker(bind=engine))
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -16,11 +22,6 @@ if not os.getenv("DATABASE_URL"):
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-
-# Set up database
-#DATABASE_URL = "postgresql://wlkiwvwgqndwtf:411e57176f8293d3bafb47d1ad1899c1c9048b85f641b92b4e6b1e9e506351ae@ec2-54-209-165-105.compute-1.amazonaws.com:5432/d87jp096ui7i1f"
-engine = create_engine(os.getenv("DATABASE_URL"))
-db = scoped_session(sessionmaker(bind=engine))
 
 
 # App routes for pages
