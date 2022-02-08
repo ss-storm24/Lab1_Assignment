@@ -95,9 +95,29 @@ def logout():
 def search():
     if request.method == "POST":
         book_search = request.form.get("search")
+        usearch = '%' + book_search.lower() + '%'
         # If the user searches by isbn
-        if u_search = db.execute("SELECT * FROM books WHERE isbn"):
-            return render_template("search.html")
+        if u_search == db.execute("SELECT * FROM books WHERE isbn LIKE :usearch", {"usearch": usearch}).fetchall():
+            return render_template("search.html", results = u_search)
+        # If the user searches by title
+        if u_search == db.execute("SELECT * FROM books WHERE LOWER(title) LIKE :usearch", {"usearch": usearch}).fetchall():
+            return render_template("search.html", results = u_search)
+        # If the user searches by author
+        if u_search == db.execute("SELECT * FROM books WHERE LOWER(author) LIKE :usearch", {"usearch": usearch}).fetchall():
+            return render_template("search.html", results=u_search)
+    return render_template("search.html")
+
+@app.route("/book/<string:isbn>", methods=["GET", "POST"])
+def book_result(isbn):
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchnone()
+
+    if db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).rowcount == 0:
+        return render_template("error.html", message="Book not found. Please search again."), 404
+
+    GOOGLEBOOKS_API = "AIzaSyCBeFrtM_OO0HfF0eOgKNNT5ebTNQWKWxs"
+    res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": isbn, "key": GOOGLEBOOKS_API})
+
+    revs = db.execute("SELECT * FROM reviews WHERE book_id = :book_id", {"book_id": book_id}).fetchall()
 
 
 if __name__ == "__main__":
