@@ -95,8 +95,8 @@ def logout():
 def search():
     if request.method == "POST":
         book_search = request.form.get("search")
-        # If the user searches by ISBN
-        if request.form.get("inlineRadioOptions") == "option1":
+        # If the user searches by isbn
+        if u_search = db.execute("SELECT * FROM books WHERE isbn"):
             return render_template("search.html")
 
 
