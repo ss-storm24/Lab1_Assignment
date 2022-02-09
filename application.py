@@ -23,6 +23,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# Google Books API Key
+GOOGLEBOOKS_API_KEY = "AIzaSyCBeFrtM_OO0HfF0eOgKNNT5ebTNQWKWxs"
+
 
 # App routes for pages
 @app.route("/")
@@ -73,7 +76,8 @@ def register_post():
             flash("Username already exists")
             return redirect(url_for("register"))
         else:
-            db.execute("INSERT INTO users (name, username, password) VALUES(:name, :username, :password)", {"name": name, "username": username, "password": generate_password_hash(password, method='sha256')})
+            db.execute("INSERT INTO users (name, username, password) VALUES(:name, :username, :password)",
+                       {"name": name, "username": username, "password": generate_password_hash(password, method='sha256')})
             db.commit()
             flash("Registration completed successfully!")
 
@@ -109,22 +113,49 @@ def search():
 
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def book_result(isbn):
-    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchnone()
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
 
     if db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).rowcount == 0:
         return render_template("error.html", message="Book not found. Please search again."), 404
 
-    GOOGLEBOOKS_API_KEY = "AIzaSyCBeFrtM_OO0HfF0eOgKNNT5ebTNQWKWxs"
     res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": isbn, "key": GOOGLEBOOKS_API_KEY})
+
+
+    if request.method == "POST":
+        if db.execute("SELECT * FROM reviews WHERE user_id = :uder_id AND book_id = :book_id", {"user_id": session["user_id"], "book_id": book_id}).fetchone():
+            return render_template("error.html", header="Sorry!", message="You can only submit one review per book.", isbn = isbn)
+        else:
+            rating = request.form.get("rating")
+            review = request.form.get("review")
+            db.execute("INSERT INTO reviews (user_id, book_id, rating, review) VALUES (:user_id, :book_id, :rating, :review)",
+                       {"user_id": session["user_id"], "book_id": book_id, "rating": rating, "review": review})
+            db.commit()
+            text = "You've successfully submitted a review!"
 
     revs = db.execute("SELECT * FROM reviews WHERE book_id = :book_id", {"book_id": book_id}).fetchall()
 
-    if request.method == "POST":
-        rating = request.form.get("rating")
-        review = request.form.get("review")
+    return render_template("books.html", header="Submitted!", text = text, book = book, isbn = isbn, reviews = revs)
+
+@app.route("/api/<string:isbn>")
+def book_api(isbn):
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+
+    if book is None:
+        return jsonify({"error": "Invalid ISBN"}), 404
+
+    res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": isbn, "key": GOOGLEBOOKS_API_KEY})
+    data = res.json()['books'][0]
+
+    return jsonify({
+        "isbn": book.isbn,
+        "title": book.title,
+        "author": book.author,
+        "year": book.year,
+        "ratingsCount": data['ratingsCount'],
+        "averageRating": data['averageRating']
+    })
 
 
-    return render_template("books.html", book = book, isbn = isbn, reviews = revs)
 
 
 
