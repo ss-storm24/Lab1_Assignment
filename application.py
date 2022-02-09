@@ -98,18 +98,10 @@ def logout():
 @app.route("/search", methods=["GET","POST"])
 def search():
     if request.method == "POST":
-        book_search = request.form.get("search")
-        usearch = '%' + book_search + '%'
-        # If the user searches by isbn
-        if u_search == db.execute("SELECT * FROM books WHERE isbn LIKE :usearch", {"usearch": usearch}).fetchall():
-            return render_template("search.html", results = u_search)
-        # If the user searches by title
-        if u_search == db.execute("SELECT * FROM books WHERE LOWER(title) LIKE :usearch", {"usearch": usearch}).fetchall():
-            return render_template("search.html", results = u_search)
-        # If the user searches by author
-        if u_search == db.execute("SELECT * FROM books WHERE LOWER(author) LIKE :usearch", {"usearch": usearch}).fetchall():
-            return render_template("search.html", results=u_search)
-    return render_template("search.html")
+        book_search = request.form.get("search_r")
+        u_search = db.execute("SELECT * FROM books WHERE isbn LIKE LOWER(:usearch) OR LOWER(title) LIKE LOWER(:usearch) OR LOWER(author) LIKE LOWER(:usearch)",
+                              {"usearch": book_search}).fetchall()
+        return render_template("search.html", results = u_search)
 
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def book_result(isbn):
