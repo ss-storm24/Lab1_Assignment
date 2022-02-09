@@ -99,7 +99,7 @@ def logout():
 def search():
     if request.method == "POST":
         book_search = request.form.get("search")
-        usearch = '%' + book_search.lower() + '%'
+        usearch = '%' + book_search + '%'
         # If the user searches by isbn
         if u_search == db.execute("SELECT * FROM books WHERE isbn LIKE :usearch", {"usearch": usearch}).fetchall():
             return render_template("search.html", results = u_search)
