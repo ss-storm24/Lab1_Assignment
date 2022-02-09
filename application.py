@@ -114,10 +114,18 @@ def book_result(isbn):
     if db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).rowcount == 0:
         return render_template("error.html", message="Book not found. Please search again."), 404
 
-    GOOGLEBOOKS_API = "AIzaSyCBeFrtM_OO0HfF0eOgKNNT5ebTNQWKWxs"
-    res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": isbn, "key": GOOGLEBOOKS_API})
+    GOOGLEBOOKS_API_KEY = "AIzaSyCBeFrtM_OO0HfF0eOgKNNT5ebTNQWKWxs"
+    res = requests.get("https://www.googleapis.com/books/v1/volumes", params={"q": isbn, "key": GOOGLEBOOKS_API_KEY})
 
     revs = db.execute("SELECT * FROM reviews WHERE book_id = :book_id", {"book_id": book_id}).fetchall()
+
+    if request.method == "POST":
+        rating = request.form.get("rating")
+        review = request.form.get("review")
+
+
+    return render_template("books.html", book = book, isbn = isbn, reviews = revs)
+
 
 
 if __name__ == "__main__":
